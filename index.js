@@ -2,6 +2,8 @@
  * (C) 2015 Seth Lakowske
  */
 
+var wgs84 = require('wgs84');
+
 /*
  * Converts an angle in radians to degrees.
  */
@@ -25,9 +27,9 @@ function radians(angle) {
  * 5th July 1999
  */
 function ECEFProjector() {
-    this.a = 6378137.0
-    this.f = 1/298.257223563
-    this.b = this.a * (1 - this.f)
+    this.a = wgs84.RADIUS;
+    this.f = wgs84.FLATTENING;
+    this.b = wgs84.POLAR_RADIUS;
     this.asqr = this.a*this.a
     this.bsqr = this.b*this.b
 
@@ -38,7 +40,7 @@ function ECEFProjector() {
 /*
  * Convert GPS coordinates (degrees) to Cartesian coordinates (meters)
  */
-ECEFProjector.prototype.projectLLA = function(latitude, longitude, altitude) {
+ECEFProjector.prototype.project = function(latitude, longitude, altitude) {
     return this.LLAToECEF(radians(latitude), radians(longitude), altitude)
 }
 

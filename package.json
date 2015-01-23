@@ -1,0 +1,40 @@
+{
+  "name": "ecef-projector",
+  "version": "0.0.1",
+  "description": "Projects coordinates from geodetic to ECEF and unprojects from ECEF to geodetic",
+  "main": "index.js",
+  "dependencies": {
+    "tape": "^3.4.0",
+    "wgs84": "0.0.0"
+  },
+  "devDependencies": {
+    "tape": "^3.4.0"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lakowske/ecef-projector.git"
+  },
+  "keywords": [
+    "wgs84",
+    "lat",
+    "lon",
+    "cartesian",
+    "earth",
+    "centered",
+    "fixed",
+    "conventional",
+    "terrestrial",
+    "world",
+    "geo",
+    "geographic"
+  ],
+  "author": "Seth Lakowske <lakowske@gmail.com> (http://sethlakowske.com/)",
+  "license": "BSD-3",
+  "bugs": {
+    "url": "https://github.com/lakowske/ecef-projector/issues"
+  },
+  "homepage": "https://github.com/lakowske/ecef-projector"
+}
