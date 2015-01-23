@@ -73,10 +73,12 @@ ECEFProjector.prototype.LLAToECEF = function(latitude, longitude, altitude) {
 
 ECEFProjector.prototype.ECEFToLLA =  function(X, Y, Z) {
     //Auxiliary values first
-    var p = Math.sqrt(X*X + Y*Y)
+    var p = Math.sqrt(X*X + Y*Y);
     var theta = Math.atan((Z*this.a)/(p*this.b))
+
     var sintheta = Math.sin(theta)
     var costheta = Math.cos(theta)
+
     var num = Z + this.eprime * this.eprime * this.b * sintheta * sintheta * sintheta
     var denom = p - this.e * this.e * this.a * costheta * costheta * costheta
 
@@ -85,6 +87,14 @@ ECEFProjector.prototype.ECEFToLLA =  function(X, Y, Z) {
     var longitude = Math.atan(Y/X)
     var N = this.N(latitude)
     var altitude  = (p / Math.cos(latitude)) - N
+
+    if (X < 0 && Y < 0) {
+        longitude = longitude - Math.PI;
+    }
+
+    if (X < 0 && Y > 0) {
+        longitude = longitude + Math.PI;
+    }
 
     return [latitude, longitude, altitude]
 }
