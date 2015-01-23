@@ -36,7 +36,9 @@ var projector = new ECEFProjector();
 
 Return an array `xyz` of `[x,y,z]` coordinates in meters from `lat`, `lon` and `alt` where lat and lon are in degrees.
 
-Optionally supply an `elevation` in meters.
+## var gps = projector.unproject(x, y, z)
+
+Return an array of `[lat, lon, alt]` coordinates in degrees from `x`, `y`, and `z` in meters
 
 # install
 
