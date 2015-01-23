@@ -4,9 +4,8 @@
 
 var test = require('tape');
 var wgs84 = require('wgs84');
-var ECEFProjector = require('./');
+var ecefProjector = require('./');
 
-var ecefProjector = new ECEFProjector();
 
 test('can project the prime meridian equator intersection and unproject', function(t) {
 

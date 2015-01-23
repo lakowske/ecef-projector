@@ -8,8 +8,7 @@ to [ecef](http://en.wikipedia.org/wiki/ECEF) (cartesian [x,y,z]) and [ecef](http
 # example
 
 ``` js
-var ECEFProjector = require('ecef-projector');
-var projector = new ECEFProjector();
+var projector = require('ecef-projector');
 var xyz = projector.project(37.8043722, -122.2708026, 0.0);
 console.log(xyz);
 var gps = projector.unproject(xyz[0], xyz[1], xyz[2]);
@@ -27,8 +26,7 @@ $ node ecef.js
 # methods
 
 ``` js
-var ECEFProjector = require('ecef-projector')
-var projector = new ECEFProjector();
+var projector = require('ecef-projector')
 ```
 
 ## var xyz = projector.project(lat, lon, elevation)

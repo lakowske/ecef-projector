@@ -1,5 +1,12 @@
 /*
  * (C) 2015 Seth Lakowske
+
+ * A projector that converts GPS->ECEF and ECEF->GPS
+ *
+ * Formulas from this paper:
+ * Datum Transformations of GPS Positions
+ * Application Note
+ * 5th July 1999
  */
 
 var wgs84 = require('wgs84');
@@ -19,36 +26,30 @@ function radians(angle) {
 }
 
 /*
- * A projector that converts GPS->ECEF and ECEF->GPS
- *
- * Formulas from this paper:
- * Datum Transformations of GPS Positions
- * Application Note
- * 5th July 1999
+ * Some constants we'll want to have on hand
  */
-function ECEFProjector() {
-    this.a = wgs84.RADIUS;
-    this.f = wgs84.FLATTENING;
-    this.b = wgs84.POLAR_RADIUS;
-    this.asqr = this.a*this.a
-    this.bsqr = this.b*this.b
+var a    = wgs84.RADIUS;
+var f    = wgs84.FLATTENING;
+var b    = wgs84.POLAR_RADIUS;
+var asqr = a*a;
+var bsqr = b*b;
 
-    this.e = Math.sqrt((this.asqr-this.bsqr)/this.asqr)
-    this.eprime = Math.sqrt((this.asqr-this.bsqr)/this.bsqr)
-}
+var e = Math.sqrt((asqr-bsqr)/asqr);
+var eprime = Math.sqrt((asqr-bsqr)/bsqr);
+
 
 /*
  * Convert GPS coordinates (degrees) to Cartesian coordinates (meters)
  */
-ECEFProjector.prototype.project = function(latitude, longitude, altitude) {
-    return this.LLAToECEF(radians(latitude), radians(longitude), altitude)
+function project(latitude, longitude, altitude) {
+    return LLAToECEF(radians(latitude), radians(longitude), altitude);
 }
 
 /*
  * Convert Cartesian coordinates (meters) to GPS coordinates (degrees)
  */
-ECEFProjector.prototype.unproject = function(x, y, z) {
-    var gps = this.ECEFToLLA(x, y, z)
+function unproject(x, y, z) {
+    var gps = ECEFToLLA(x, y, z);
 
     gps[0] = degrees(gps[0]);
     gps[1] = degrees(gps[1]);
@@ -56,37 +57,37 @@ ECEFProjector.prototype.unproject = function(x, y, z) {
     return gps;
 }
 
-ECEFProjector.prototype.LLAToECEF = function(latitude, longitude, altitude) {
+function LLAToECEF(latitude, longitude, altitude) {
     //Auxiliary values first
-    var N = this.N(latitude)
-    var ratio = (this.bsqr / this.asqr)
+    var N = getN(latitude);
+    var ratio = (bsqr / asqr);
 
     //Now calculate the Cartesian coordinates
-    var X = (N + altitude) * Math.cos(latitude) * Math.cos(longitude)
-    var Y = (N + altitude) * Math.cos(latitude) * Math.sin(longitude)
+    var X = (N + altitude) * Math.cos(latitude) * Math.cos(longitude);
+    var Y = (N + altitude) * Math.cos(latitude) * Math.sin(longitude);
 
     //Sine of latitude looks right here
-    var Z = (ratio * N + altitude) * Math.sin(latitude)
+    var Z = (ratio * N + altitude) * Math.sin(latitude);
 
     return [X, Y, Z];
 }
 
-ECEFProjector.prototype.ECEFToLLA =  function(X, Y, Z) {
+function ECEFToLLA(X, Y, Z) {
     //Auxiliary values first
     var p = Math.sqrt(X*X + Y*Y);
-    var theta = Math.atan((Z*this.a)/(p*this.b))
+    var theta = Math.atan((Z*a)/(p*b));
 
-    var sintheta = Math.sin(theta)
-    var costheta = Math.cos(theta)
+    var sintheta = Math.sin(theta);
+    var costheta = Math.cos(theta);
 
-    var num = Z + this.eprime * this.eprime * this.b * sintheta * sintheta * sintheta
-    var denom = p - this.e * this.e * this.a * costheta * costheta * costheta
+    var num = Z + eprime * eprime * b * sintheta * sintheta * sintheta;
+    var denom = p - e * e * a * costheta * costheta * costheta;
 
     //Now calculate LLA
-    var latitude  = Math.atan(num/denom)
-    var longitude = Math.atan(Y/X)
-    var N = this.N(latitude)
-    var altitude  = (p / Math.cos(latitude)) - N
+    var latitude  = Math.atan(num/denom);
+    var longitude = Math.atan(Y/X);
+    var N = getN(latitude);
+    var altitude  = (p / Math.cos(latitude)) - N;
 
     if (X < 0 && Y < 0) {
         longitude = longitude - Math.PI;
@@ -96,14 +97,15 @@ ECEFProjector.prototype.ECEFToLLA =  function(X, Y, Z) {
         longitude = longitude + Math.PI;
     }
 
-    return [latitude, longitude, altitude]
+    return [latitude, longitude, altitude];
 }
 
-ECEFProjector.prototype.N = function(latitude) {
-    var sinlatitude = Math.sin(latitude)
-    var denom = Math.sqrt(1-this.e*this.e*sinlatitude*sinlatitude)
-    var N = this.a / denom
-    return N
+function getN(latitude) {
+    var sinlatitude = Math.sin(latitude);
+    var denom = Math.sqrt(1-e*e*sinlatitude*sinlatitude);
+    var N = a / denom;
+    return N;
 }
 
-module.exports = ECEFProjector;
+module.exports.project   = project;
+module.exports.unproject = unproject;
