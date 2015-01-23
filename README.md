@@ -1,1 +1,53 @@
+# ecef-projector
+
 A projector that converts GPS->ECEF and ECEF->GPS
+
+convert [geodetic coordinates](https://en.wikipedia.org/wiki/World_Geodetic_System)
+([lat,lon, alt])
+to [ecef](http://en.wikipedia.org/wiki/ECEF) (cartesian [x,y,z]) and [ecef](http://en.wikipedia.org/wiki/ECEF) to 
+[geodetic coordinates](https://en.wikipedia.org/wiki/World_Geodetic_System)
+
+# example
+
+``` js
+var projector = new require('ecef-projector')();
+var xyz = projector.project(37.8043722, -122.2708026, 0.0);
+console.log(xyz);
+var gps = projector.unproject(xyz[0], xyz[1], xyz[2]);
+console.log(gps);
+```
+
+output:
+
+```
+$ node ecef.js
+[ -2694044.4111565403, -4266368.805493665, 3888310.602276871 ]
+[ 37.8043722, -122.2708026, 0.0 ]
+```
+
+# methods
+
+``` js
+var ECEFProjector = require('ecef-projector')
+var projector = new ECEFProjector();
+```
+
+## var xyz = projector.project(lat, lon, elevation)
+
+Return an array `xyz` of `[x,y,z]` coordinates in meters from `lat`, `lon` and `alt` where lat and lon are in degrees.
+
+Optionally supply an `elevation` in meters.
+
+# install
+
+With [npm](https://npmjs.org) do:
+
+```
+npm install ecef-projector
+```
+
+# license
+
+BSD-3
+
+
