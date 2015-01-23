@@ -1,11 +1,9 @@
 # ecef-projector
 
-A projector that converts GPS->ECEF and ECEF->GPS
-
 convert [geodetic coordinates](https://en.wikipedia.org/wiki/World_Geodetic_System)
 ([lat,lon, alt])
-to [ecef](http://en.wikipedia.org/wiki/ECEF) (cartesian [x,y,z]) and [ecef](http://en.wikipedia.org/wiki/ECEF) to 
-[geodetic coordinates](https://en.wikipedia.org/wiki/World_Geodetic_System)
+to [ecef](http://en.wikipedia.org/wiki/ECEF) (cartesian [x,y,z]) and [ecef](http://en.wikipedia.org/wiki/ECEF) (cartesian [x,y,z]) to 
+[geodetic coordinates](https://en.wikipedia.org/wiki/World_Geodetic_System) ([lat,lon, alt])
 
 # example
 
