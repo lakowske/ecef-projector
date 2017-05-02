@@ -4,11 +4,10 @@
   "description": "Projects coordinates from geodetic to ECEF and unprojects from ECEF to geodetic",
   "main": "index.js",
   "dependencies": {
-    "tape": "^3.4.0",
     "wgs84": "0.0.0"
   },
   "devDependencies": {
-    "tape": "^3.4.0"
+    "tape": "^4.6.3"
   },
   "scripts": {
     "test": "node test.js"
