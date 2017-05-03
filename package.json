@@ -1,6 +1,6 @@
 {
   "name": "ecef-projector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Projects coordinates from geodetic to ECEF and unprojects from ECEF to geodetic",
   "main": "index.js",
   "dependencies": {
